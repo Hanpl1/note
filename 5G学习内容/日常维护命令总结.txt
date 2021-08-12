@@ -1,0 +1,69 @@
+*软件版本检查：
+#show version （检查当前软件版本）
+*历史告警检查：
+#show system alarme （显示当前警告）
+#show system alarme cleared（输出指定时间后的历史警告）
+*板子状态检查：
+#show card   （检查槽位板卡配置及其运行状态）
+#show card detail | match boot(显示卡片细节|匹配引导)
+#show mda    （检查槽位板子卡配置及其运行状态）
+#show mda detail | ji'qi'dmatch boot （显示mda细节|匹配引导）
+#show chassis （检查机箱风扇电源及其运行状态）
+*各网络接口工作状态：登录交换模块，在命令行控制台命令行开始执行以下命令
+#show router 1106 interface 
+*检查SAEGW系统工作状态：
+#show mobile-gateway system
+#show mobile-gateway system | match expression ”Oper state | Role/Red state”
+*当前时刻重要APN用户激活数目：在CMG SAEGW的执行
+#show mobile-gateway pdn apn ”cmnetvl” statistics（查看APN激活数目）
+*检查当前磁盘分区使用情况：在CMG SAEGW的命令行控制台环境下
+#df -h （使用率《=85%）
+*检查CPU、Memory负荷：在CMG SAEGW的命令行控制台环境下
+# show system cpu	(查看CPU占用率)
+# show system memory-pools(查看内存利用率)
+# show mobile-gateway ism-mg cpu(查看各虚拟机CPU负荷)
+# show mobile-gateway ism-mg memory-pools(查看各虚拟机内存利用率)
+# show card 1 virtual fp(查看各板卡虚拟转发利用率信息)
+*检查话单传送情况:在CMG SAEGW的命令行控制台环境下
+# show mobile-gateway pdn statistics summary | match Ga
+# show mobile-gateway pdn ref-point-stats ga aggregate
+Ga CDRs in queue(m3030c0001) 数值应小于100,或者一直减少；
+Ga CDRs buffered数值为0；
+Ga Big DRTs Buffered数值为0
+*检查当前CF磁盘空间使用情况:在CMG SAEGW的命令行控制台环境下
+A:CSSAE-GW60BNK#file
+A:CSSAE-GW60BNK>file cf3:\ # cd cf1:
+A:CSSAE-GW60BNK>file cf1:\ # dir
+*SAEGW设备配置备份（备份配置文件）:在CMG的命令环境下
+# admin save
+然后用SFTP或FTP方式将SAEGW 上的cf1:\下的config.cfg文件
+拷贝至备份主机硬盘，选择binary方式传送数据。
+A:CSSAE-GW60BNK#file
+A:CSSAE-GW60BNK>file cf3:\ # cd cf1:
+A:CSSAE-GW60BNK>file cf1:\ # dir
+*SAEGW路由表及路由状态:
+# show router 1106 route-table
+*检查NTP设置:
+# show system ntp all
+*APN参数检查:在CMG的命令环境下
+# admin display-config
+*Charging参数检查:在CMG的命令环境下
+# show mobile-gateway profile charging pgw-charging 0
+# show mobile-gateway profile charging sgw-charging 0
+# show mobile-gateway profile charging pgw-charging 4
+# show mobile-gateway profile charging sgw-charging 4
+# show mobile-gateway profile charging pgw-charging 8
+# show mobile-gateway profile charging sgw-charging 8
+*PDP失败统计分析:
+#show mobile-gateway pdn statistics attach-failure-statistics summary
+#show mobile-gateway pdn call-flow-stats summary
+检查标准:
+系统日志如有异常持续快速增长，需深入分析解决。
+*接口失败分析:
+# show mobile-gateway pdn ref-point-stats s11 failure-codes aggregate
+# show mobile-gateway pdn ref-point-stats s5 failure-codes aggregate
+# show mobile-gateway pdn ref-point-stats gx failure-codes aggregate
+# show mobile-gateway pdn ref-point-stats gy failure-codes aggregate
+
+
+
